@@ -1,0 +1,34 @@
+{
+    "name": "markatom/accessor",
+    "type": "library",
+    "description": "Accessor provides fast access to all properties of any object.",
+    "license": "BSD-2-Clause",
+	"authors": [
+		{
+			"name": "Tomáš Markacz",
+			"email": "tomas@markacz.com",
+			"homepage": "http://markacz.com"
+		}
+	],
+	"support": {
+		"email": "tomas@markacz.com",
+		"issues": "https://github.com/Markatom/Accessor/issues"
+	},
+    "require": {
+        "php": ">=5.5",
+        "nette/php-generator": "2.3.0"
+    },
+    "require-dev": {
+        "jakub-onderka/php-parallel-lint": "0.8",
+        "nette/tester": "1.3.2",
+        "mockery/mockery": "0.9.3"
+    },
+	"autoload": {
+		"classmap": [
+			"src/exceptions.php"
+		],
+		"psr-4": {
+			"Markatom\\Accessor\\": "src"
+		}
+	}
+}
