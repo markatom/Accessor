@@ -4,16 +4,25 @@
  * Unit test for Markatom\Accessor\Factory.
  */
 
-namespace _Accessor; // namespace for testing purposes
-
 use Markatom\Accessor\Cache;
 use Markatom\Accessor\Factory;
 use Markatom\Accessor\Generator;
 use Markatom\Accessor\Naming;
-use Mockery;
 use Tester\Assert;
 
 require __DIR__ . '/bootstrap.php';
+
+$one = <<<END
+namespace _Accessor {
+	class _One { }
+}
+END;
+
+$alphaBetaGammaDelta = <<<END
+namespace _Accessor {
+	class _Alpha_Beta_Gamma_Delta { }
+}
+END;
 
 $naming    = Mockery::mock(Naming::class);
 $generator = Mockery::mock(Generator::class);
@@ -29,8 +38,8 @@ $generator->shouldReceive('generate')->with('Foo\Bar\Baz')->once()->andReturn('n
 $generator->shouldReceive('generate')->with('Lorem\Ipsum')->once()->andReturn('namespace _Accessor; class _Lorem_Ipsum { }');
 
 $cache->shouldReceive('load')->with('_Lorem_Ipsum')->andReturn(FALSE);
-$cache->shouldReceive('load')->with('_Alpha_Beta_Gamma_Delta')->andReturnUsing(function () {
-		class _Alpha_Beta_Gamma_Delta { }
+$cache->shouldReceive('load')->with('_Alpha_Beta_Gamma_Delta')->andReturnUsing(function () use ($alphaBetaGammaDelta) {
+		eval($alphaBetaGammaDelta);
 		return TRUE;
 	});
 
@@ -39,7 +48,7 @@ $cache->shouldReceive('save')->with('_Lorem_Ipsum', 'namespace _Accessor; class 
 $factory = new Factory($naming, $generator);
 
 // existing class
-class _One { }
+eval($one);
 Assert::type('_Accessor\_One', $factory->create('One'));
 
 // no cache
