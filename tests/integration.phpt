@@ -14,12 +14,19 @@ require __DIR__ . '/bootstrap.php';
 
 class Foo
 {
-	public $public = 1;
-	protected $protected = 2;
-	private $private = 3;
+	public $public;
+	protected $protected;
+	private $private;
+
+	public function __construct($public, $protected, $private)
+	{
+		$this->public    = $public;
+		$this->protected = $protected;
+		$this->private   = $private;
+	}
 }
 
-$foo = new Foo;
+$foo = new Foo(1, 2, 3);
 
 // wire up
 $naming    = new Naming;
@@ -41,20 +48,4 @@ $fooAccessor->write($foo, [
 	'private'   => 6,
 ]);
 
-ob_start();
-var_dump($foo);
-$actual = ob_get_clean();
-
-$expected = <<<'END'
-object(Foo)#5 (3) {
-  ["public"]=>
-  int(4)
-  ["protected":protected]=>
-  int(5)
-  ["private":"Foo":private]=>
-  int(6)
-}
-
-END;
-
-Assert::same($expected, $actual);
+Assert::equal($foo, new Foo(4, 5, 6));
